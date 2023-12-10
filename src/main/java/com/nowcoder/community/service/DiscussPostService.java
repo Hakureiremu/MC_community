@@ -12,12 +12,12 @@ public interface DiscussPostService {
      * @param limit
      * @return
      */
-    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit);
+    List<DiscussPost> findDiscussPosts(int userId, int offset, int limit);
 
     /**
      * 帖子数量查询
      * @param userId
      * @return
      */
-    public int findRows(int userId);
+    int findRows(int userId);
 }

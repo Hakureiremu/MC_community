@@ -23,5 +23,4 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
-
 }
