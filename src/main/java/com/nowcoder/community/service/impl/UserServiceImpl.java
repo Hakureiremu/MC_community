@@ -1,5 +1,6 @@
 package com.nowcoder.community.service.impl;
 
+import com.fasterxml.jackson.databind.ser.std.MapSerializer;
 import com.nowcoder.community.constant.CommunityConstant;
 import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
@@ -7,6 +8,7 @@ import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityUtil;
+import com.nowcoder.community.util.HostHolder;
 import com.nowcoder.community.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,10 @@ public class UserServiceImpl implements UserService, CommunityConstant{
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    //持有用户信息
+    @Autowired
+    private HostHolder hostHolder;
 
     /**
      * 根据id查找用户
@@ -179,5 +185,48 @@ public class UserServiceImpl implements UserService, CommunityConstant{
 
     public LoginTicket findLoginTicket(String ticket){
         return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    public int updateHeader(int userId, String headerUrl){
+        return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    public Map<String, Object> updatePassword(User user, String originalPassword, String newPassword, String confirmPassword){
+        Map<String, Object> map = new HashMap<>();
+
+        //先做密码合法性判断
+        if(originalPassword.length()<8){
+            map.put("originalPasswordMsg", "密码不能小于八位！");
+            return map;
+        }
+
+//        if(user.getPassword() != originalPassword){
+//            map.put("originalPasswordMsg", "原密码错误！");
+//            return map;
+//        }
+//
+//        if (user.getPassword() == newPassword){
+//            map.put("newPasswordMsg", "新密码与原密码相同！");
+//            return map;
+//        }
+
+        if(!newPassword.equals(confirmPassword)) {
+            map.put("confirmPasswordMsg", "两次输入的密码不一致！");
+            return map;
+        }
+
+        if(!user.getPassword().equals(CommunityUtil.md5(originalPassword+user.getSalt()))){
+            map.put("originalPasswordMsg", "原始密码错误!");
+            return map;
+        }
+
+        if(user.getPassword().equals(CommunityUtil.md5(newPassword+user.getSalt()))){
+            map.put("newPasswordMsg", "新密码和原始密码一致，请重新输入！");
+            return map;
+        }
+
+        //修改密码
+        userMapper.updatePassword(user.getId(), CommunityUtil.md5(newPassword + user.getSalt()));
+        return map;
     }
 }

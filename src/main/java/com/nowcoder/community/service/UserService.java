@@ -35,18 +35,36 @@ public interface UserService {
      * @param expiredSeconds
      * @return
      */
-    public Map<String, Object> login(String username, String password, int expiredSeconds);
+    Map<String, Object> login(String username, String password, int expiredSeconds);
 
     /**
      * 用户登出
      * @param ticket
      */
-    public void logout(String ticket);
+    void logout(String ticket);
 
     /**
      * 查询登录凭证
      * @param ticket
      * @return
      */
-    public LoginTicket findLoginTicket(String ticket);
+    LoginTicket findLoginTicket(String ticket);
+
+    /**
+     * 修改头像
+     * @param userId
+     * @param headerUrl
+     * @return
+     */
+    int updateHeader(int userId, String headerUrl);
+
+    /**
+     * 修改密码
+     * @param user
+     * @param originalPassword
+     * @param newPassword
+     * @param confirmPassword
+     * @return
+     */
+    Map<String, Object> updatePassword(User user, String originalPassword, String newPassword, String confirmPassword);
 }
