@@ -22,4 +22,11 @@ public interface CommentService {
      * @return
      */
     int findCountByEntity(int entityType, int entityId);
+
+    /**
+     * 添加评论
+     * @param comment
+     * @return
+     */
+    int addComment(Comment comment);
 }

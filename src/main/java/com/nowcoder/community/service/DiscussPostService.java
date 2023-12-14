@@ -35,5 +35,11 @@ public interface DiscussPostService {
      */
     DiscussPost findDiscussPostById(int id);
 
-
+    /**
+     * 更新帖子的评论数量
+     * @param id
+     * @param commentCount
+     * @return
+     */
+    int updateCommentCount(int id, int commentCount);
 }
