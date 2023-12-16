@@ -67,4 +67,11 @@ public interface UserService {
      * @return
      */
     Map<String, Object> updatePassword(User user, String originalPassword, String newPassword, String confirmPassword);
+
+    /**
+     * 通过名字找用户
+     * @param name
+     * @return
+     */
+    User findUserByName(String name);
 }

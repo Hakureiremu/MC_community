@@ -229,4 +229,9 @@ public class UserServiceImpl implements UserService, CommunityConstant{
         userMapper.updatePassword(user.getId(), CommunityUtil.md5(newPassword + user.getSalt()));
         return map;
     }
+
+    @Override
+    public User findUserByName(String name) {
+        return userMapper.selectByName(name);
+    }
 }
