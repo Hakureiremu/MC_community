@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 import org.apache.juli.logging.Log;
 
 @Mapper
+//不推荐使用
+@Deprecated
 public interface LoginTicketMapper {
     /**
      * 插入登录凭证

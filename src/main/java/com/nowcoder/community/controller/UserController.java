@@ -56,12 +56,14 @@ public class UserController implements CommunityConstant {
     @Autowired
     private FollowService followService;
 
+    //账号设置
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage(){
         return "/site/setting";
     }
 
+    //头像设置
     @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model){
