@@ -28,6 +28,10 @@ public class ServiceLogAspect {
     public void before(JoinPoint joinPoint){
         //用户1，2，3，4在[xxx]，访问了[com.nowcoder.community.service.xx()]
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //特殊调用(consumer)
+        if(attributes == null){
+            return;
+        }
         HttpServletRequest request = attributes.getRequest();
         String ip = request.getRemoteHost();
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());

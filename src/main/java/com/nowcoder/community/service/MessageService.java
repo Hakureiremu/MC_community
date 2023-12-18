@@ -61,4 +61,38 @@ public interface MessageService {
      * @return
      */
     int readMessage(List<Integer> ids);
+
+    /**
+     * 查询最新通知
+     * @param userId
+     * @param topic
+     * @return
+     */
+    Message findLatestNotice(int userId, String topic);
+
+    /**
+     * 查询通知数量
+     * @param userId
+     * @param topic
+     * @return
+     */
+    int findNoticeCount(int userId, String topic);
+
+    /**
+     * 查询未读通知数量
+     * @param userId
+     * @param topic
+     * @return
+     */
+    int findUnreadNoticeCount(int userId, String topic);
+
+    /**
+     * 查询通知列表
+     * @param userId
+     * @param topic
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Message> findNotices(int userId, String topic, int offset, int limit);
 }
