@@ -2,9 +2,13 @@ package com.nowcoder.community.event;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nowcoder.community.constant.CommunityConstant;
+import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.Event;
 import com.nowcoder.community.entity.Message;
+import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.service.ElasticSearchService;
 import com.nowcoder.community.service.MessageService;
+import com.nowcoder.community.util.HostHolder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +27,13 @@ public class EventConsumer implements CommunityConstant {
     @Autowired
     private MessageService messageService;
 
-    //自动触发
+    @Autowired
+    private DiscussPostService discussPostService;
+
+    @Autowired
+    private ElasticSearchService elasticSearchService;
+
+    //自动触发，消费评论、点赞、关注事件，设置系统通知
     @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
     public void handleCommentMessage(ConsumerRecord record){
         if(record == null || record.value() == null){
@@ -31,7 +41,7 @@ public class EventConsumer implements CommunityConstant {
             return;
         }
 
-        //将json格式的消息转会event类
+        //将json格式的消息转回event类
         Event event = JSONObject.parseObject(record.value().toString(), Event.class);
 
         if(event == null){
@@ -47,6 +57,7 @@ public class EventConsumer implements CommunityConstant {
         message.setCreateTime(new Date());
 
         Map<String, Object> content = new HashMap<>();
+
         //谁触发的事件
         content.put("userId", event.getUserId());
         content.put("entityType", event.getEntityType());
@@ -60,5 +71,27 @@ public class EventConsumer implements CommunityConstant {
 
         message.setContent(JSONObject.toJSONString(content));
         messageService.addMessage(message);
+    }
+
+    //消费发帖事件
+    @KafkaListener(topics = {TOPIC_PUBLISH})
+    public void handlePublicMessage(ConsumerRecord record){
+        if(record == null || record.value() == null){
+            logger.error("消息内容为空!");
+            return;
+        }
+
+        //将json格式的消息转回event类
+        Event event = JSONObject.parseObject(record.value().toString(), Event.class);
+
+        if(event == null){
+            logger.error("消息格式错误!");
+            return;
+        }
+
+        //将帖子存入es服务器
+        DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
+        elasticSearchService.saveDiscussPost(post);
+
     }
 }

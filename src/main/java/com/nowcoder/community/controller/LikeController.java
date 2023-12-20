@@ -56,7 +56,9 @@ public class LikeController implements CommunityConstant {
                     .setEntityUserId(entityUserId)
                     .setData("postId", postId);
             //发布消息
-            eventProducer.fireEvent(event);
+            if(user.getId() != entityUserId){
+                eventProducer.fireEvent(event);
+            }
         }
 
         return CommunityUtil.getJSONString(0, null, map);
