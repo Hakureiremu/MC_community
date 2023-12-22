@@ -60,4 +60,10 @@ public class HomeController implements CommunityConstant {
     public String getErrorPage(){
         return "/error/500";
     }
+
+    //权限不足时同步请求重定向
+    @RequestMapping(path = "/denied", method = RequestMethod.GET)
+    public String getDeniedPage(){
+        return "/error/404";
+    }
 }
