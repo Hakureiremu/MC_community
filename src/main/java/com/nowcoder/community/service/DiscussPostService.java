@@ -12,7 +12,7 @@ public interface DiscussPostService {
      * @param limit
      * @return
      */
-    List<DiscussPost> findDiscussPosts(int userId, int offset, int limit);
+    List<DiscussPost> findDiscussPosts(int userId, int offset, int limit, int orderMode);
 
     /**
      * 帖子数量查询
@@ -58,4 +58,6 @@ public interface DiscussPostService {
      * @return
      */
     int updateStatus(int id, int status);
+
+    int updateScore(int id, double score);
 }

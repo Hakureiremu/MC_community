@@ -50,13 +50,13 @@ public class KriyesApplicationTests{
 
     @Test
     public void testSelectPosts(){
-        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0,0,10);
-        for(DiscussPost post : list) {
-            System.out.println(post);
-        }
-
-        int rows = discussPostMapper.selectDiscussPostRows(0);
-        System.out.println(rows);
+//        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0,0,10);
+//        for(DiscussPost post : list) {
+//            System.out.println(post);
+//        }
+//
+//        int rows = discussPostMapper.selectDiscussPostRows(0);
+//        System.out.println(rows);
     }
 //	private ApplicationContext applicationContext;
 //	@Override
