@@ -71,6 +71,7 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 
                         //二级缓存 redis --> mysql
 
+
                         logger.debug("load post list from DB.");
                         return discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
                     }

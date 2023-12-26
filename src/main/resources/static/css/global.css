@@ -3,7 +3,8 @@ html {
 }
 
 body {
-	background: #eee;
+	background-image: url("https://avatarimg1.oss-cn-beijing.aliyuncs.com/communityIcon/background.jpg");
+	background-size: cover;
 	font-family: arial, STHeiti, 'Microsoft YaHei', \5b8b\4f53;
 	font-size: 14px;
 	height: 100%;
@@ -21,7 +22,7 @@ body {
 }
 
 header .navbar-brand {
-	background: url('http://static.nowcoder.com/images/res/logo/logo-v3.png') no-repeat;
+	background: url('http://avatarimg1.oss-cn-beijing.aliyuncs.com/communityIcon/home.png') no-repeat;
 	background-size: 147px 42px;
 	width: 147px;
 	height: 42px;
