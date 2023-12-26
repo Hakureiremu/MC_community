@@ -40,7 +40,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
                 User user = userService.findUserById(loginTicket.getUserId());
                 //在本次请求中持有用户,使用threadlocal实现线程隔离
                 hostHolder.setUser(user);
-//
+
 //                //构建用户认证结果并存入SecurityContext，以便于Security进行授权
 //                //在每次请求的开始判断
 //                Authentication authentication = new UsernamePasswordAuthenticationToken(

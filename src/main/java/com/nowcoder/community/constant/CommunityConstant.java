@@ -24,7 +24,7 @@ public interface CommunityConstant {
     /**
      * 记住状态的凭证超时时间
      */
-    int REMEMBER_EXPIRED_SECONDS = 3600 * 24 *100;
+    int REMEMBER_EXPIRED_SECONDS = 3600 * 24 * 30;
 
     /**
      * 实体类型：帖子
