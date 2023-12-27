@@ -74,7 +74,7 @@
 						<button type="button" class="btn btn-danger btn-sm" id="wonderfulBtn"
 								th:if="${user.id==1}" th:disabled="${post.status == 1}">加精</button>
 						<button type="button" class="btn btn-danger btn-sm" id="deleteBtn"
-								th:if="${user.id==loginUser.id}" th:disabled="${post.status == 2}">删除</button>
+								th:if="${loginUser!=null && user.id==loginUser.id}" th:disabled="${post.status == 2}">删除</button>
 					</div>
 				</h6>
 				<!-- 作者 -->
@@ -83,7 +83,9 @@
 						<img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="用户头像" >
 					</a>
 					<div class="media-body">
-						<div class="mt-0 text-warning" th:utext="${user.username}">寒江雪</div>
+						<div class="mt-0 text-warning" th:utext="${loginUser!=null && user.id==loginUser.id}? '我':${user.username}">
+							寒江雪
+						</div>
 						<div class="text-muted mt-3">
 							发布于 <b th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
 							<ul class="d-inline float-right">
