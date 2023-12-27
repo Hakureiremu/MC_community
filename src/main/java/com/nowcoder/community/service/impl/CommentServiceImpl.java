@@ -65,4 +65,8 @@ public class CommentServiceImpl implements CommentService, CommunityConstant {
         return commentMapper.selectCommentById(commentId);
     }
 
+    @Override
+    public List<Comment> findCommentByUserId(int userId, int offset, int limit) {
+        return commentMapper.selectCommentByUserId(userId, offset, limit);
+    }
 }

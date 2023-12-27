@@ -2,13 +2,11 @@ package com.nowcoder.community.controller;
 
 import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.constant.CommunityConstant;
+import com.nowcoder.community.entity.Comment;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.Page;
 import com.nowcoder.community.entity.User;
-import com.nowcoder.community.service.DiscussPostService;
-import com.nowcoder.community.service.FollowService;
-import com.nowcoder.community.service.LikeService;
-import com.nowcoder.community.service.UserService;
+import com.nowcoder.community.service.*;
 import com.nowcoder.community.util.AliOssUtil;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
@@ -17,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +60,9 @@ public class UserController implements CommunityConstant {
 
     @Autowired
     private DiscussPostService postService;
+
+    @Autowired
+    private CommentService commentService;
 
     //账号设置
     @LoginRequired
@@ -191,16 +185,17 @@ public class UserController implements CommunityConstant {
         return "/site/profile";
     }
 
-    @RequestMapping(path = "/{userId}/posts", method = RequestMethod.GET)
-    public String getUserPosts(@PathVariable("userId") int userId, Model model, Page page){
-        User user = userService.findUserById(userId);
+    @RequestMapping(path = "/posts", method = RequestMethod.GET)
+    public String getUserPosts(Model model, Page page){
+        User user = hostHolder.getUser();
+        int userId = user.getId();
         if(user == null){
             throw new RuntimeException("该用户不存在！");
         }
 
         //分页信息
         page.setLimit(5);
-        page.setPath("/" + userId + "/posts");
+        page.setPath("/posts");
         page.setRows(postService.findRows(userId));
 
         List<DiscussPost> list = postService.findDiscussPosts(userId, page.getOffset(), page.getLimit(), 0);
@@ -219,6 +214,34 @@ public class UserController implements CommunityConstant {
         model.addAttribute("discussPosts", discussPosts);
 
         return "/site/my-post";
+    }
+
+    @RequestMapping(path = "/comments", method = RequestMethod.GET)
+    public String getUserComments(Model model, Page page){
+        User user = hostHolder.getUser();
+        int userId = user.getId();
+
+        //分页信息
+        page.setLimit(5);
+        page.setPath("/comments");
+        page.setRows(postService.findRows(userId));
+
+        List<Comment> list = commentService.findCommentByUserId(userId, page.getOffset(), page.getLimit());
+        List<Map<String, Object>> comments = new ArrayList<>();
+
+        if(list != null){
+            for(Comment comment : list){
+                Map<String, Object> map = new HashMap<>();
+                if(comment.getEntityType() == ENTITY_TYPE_POST){
+                    map.put("comment", comment);
+                    DiscussPost post = postService.findDiscussPostById(comment.getEntityId());
+                    map.put("post", post);
+                }
+                comments.add(map);
+            }
+        }
+        model.addAttribute("comments", comments);
+        return "/site/my-reply";
     }
 
 }

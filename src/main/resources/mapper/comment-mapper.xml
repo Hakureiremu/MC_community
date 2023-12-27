@@ -40,4 +40,13 @@
         where id = #{id}
     </select>
 
+    <select id="selectCommentByUserId" resultType="com.nowcoder.community.entity.Comment">
+        select <include refid="selectFields"></include>
+        from comment
+        where status = 0
+        and user_id = #{userId}
+        order by create_time desc
+        limit #{offset}, #{limit}
+    </select>
+
 </mapper>

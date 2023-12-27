@@ -36,4 +36,11 @@ public interface CommentService {
      * @return
      */
     Comment findCommentById(int commentId);
+
+    /**
+     * 根据用户id查找评论
+     * @param userId
+     * @return
+     */
+    List<Comment> findCommentByUserId(int userId, int offset, int limit);
 }

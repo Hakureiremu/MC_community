@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
@@ -38,6 +39,8 @@ public class CommentController implements CommunityConstant {
     private RedisTemplate redisTemplate;
 
     @RequestMapping(path = "/add/{discussPostId}", method = RequestMethod.POST)
+    //要修改成异步方式，不然未登录用户摸一下评论就直接跳error页面
+    @ResponseBody
     public String addComment(@PathVariable("discussPostId") int discussPostId, Comment comment){
         User user = hostHolder.getUser();
         comment.setUserId(user.getId());
