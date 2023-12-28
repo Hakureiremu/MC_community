@@ -37,8 +37,8 @@ public class UserController implements CommunityConstant {
     @Autowired
     private AliOssUtil aliOssUtil;
 
-    @Value("${community.path.upload}")
-    private String uploadPath;
+//    @Value("${community.path.upload}")
+//    private String uploadPath;
 
     @Value("${community.path.domain}")
     private String domain;
