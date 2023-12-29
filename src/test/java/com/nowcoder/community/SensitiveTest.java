@@ -7,7 +7,7 @@
 //import org.springframework.test.context.ContextConfiguration;
 //
 //
-//@SpringBootTest
+////@SpringBootTest
 //@ContextConfiguration(classes = KriyesApplication.class)
 //public class SensitiveTest {
 //

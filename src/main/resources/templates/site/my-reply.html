@@ -78,9 +78,9 @@
 				</div>
 				<!-- 我的回复 -->
 				<div class="mt-4">
-					<h6><b class="square"></b> 我回复的帖子(379)</h6>
+					<h6><b class="square"></b> 我回复的帖子</h6>
 					<ul class="list-unstyled mt-4 pl-3 pr-3">
-						<li class="border-bottom pb-3 mt-4" th:each="map:${comments}">
+						<li class="border-bottom pb-3 mt-4" th:if="${comments!=null}" th:each="map:${comments}">
 							<div class="font-size-16 text-info">
 								<a th:href="@{|/discuss/detail/${map.post.id}|}" th:utext="${map.post.title}">备战春招，面试刷题跟他复习，一个月全搞定！</a>
 							</div>

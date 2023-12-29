@@ -7,7 +7,7 @@
 //import org.thymeleaf.TemplateEngine;
 //import org.thymeleaf.context.Context;
 //
-//@SpringBootTest
+////@SpringBootTest
 //public class MailTests {
 //    @Autowired
 //    private MailClient mailClient;
