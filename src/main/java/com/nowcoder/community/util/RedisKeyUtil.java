@@ -13,6 +13,8 @@ public class RedisKeyUtil {
     private static final String PREFIX_UV = "uv";
     private static final String PREFIX_DAU = "dau";
     private static final String PREFIX_POST = "post";
+    private static final String PREFIX_HOME = "home";
+    private static final String PREFIX_POST_NUM = "homeNum";
 
     //某个实体的赞
     //like:entity:entityType:entityId -> set(userId)
@@ -76,4 +78,10 @@ public class RedisKeyUtil {
     public static String getPostScoreKey(){
         return PREFIX_POST + SPLIT + "score";
     }
+
+    //帖子列表（按热度）
+    public static String getHomeKey(){ return PREFIX_HOME;}
+
+    //帖子数量（按热度）
+    public static String getHomeNum(){ return PREFIX_POST_NUM;}
 }

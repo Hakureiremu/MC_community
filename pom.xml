@@ -12,7 +12,9 @@
 	<artifactId>Kriyes</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Community</name>
-	<description>nowcoder community</description>
+	<description>kairo community</description>
+<!--	<packaging>war</packaging>-->
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -133,6 +135,7 @@
     </dependencies>
 
 	<build>
+<!--		<finalName>ROOT</finalName>-->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

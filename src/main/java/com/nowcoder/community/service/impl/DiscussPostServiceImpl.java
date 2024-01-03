@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.util.RedisKeyUtil;
 import com.nowcoder.community.util.SensitiveFilter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
@@ -32,13 +34,20 @@ public class DiscussPostServiceImpl implements DiscussPostService {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     //缓存数据的数量
     @Value("${caffeine.posts.max-size}")
     private int maxSize;
 
     //缓存过期时间
     @Value("${caffeine.posts.expire-seconds}")
-    private int expireSeconds;
+    private int expireSeconds1;
+
+    //二级缓存过期时间
+    @Value("240")
+    private int expireSeconds2;
 
     //Caffeine核心接口： Cache, LoadingCache, AsyncLoadingCache
 
@@ -53,7 +62,7 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         //初始化帖子列表缓存
         postListCache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
-                .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
+                .expireAfterWrite(expireSeconds1, TimeUnit.SECONDS)
                 .build(new CacheLoader<String, List<DiscussPost>>() {
                     @Override
                     public @Nullable List<DiscussPost> load(@NonNull String key) throws Exception {
@@ -69,25 +78,38 @@ public class DiscussPostServiceImpl implements DiscussPostService {
                         int offset = Integer.valueOf(params[0]);
                         int limit = Integer.valueOf(params[1]);
 
-                        //二级缓存 redis --> mysql
-
-
+                        String redisKey = RedisKeyUtil.getHomeKey();
+                        //二级缓存
+                        List<DiscussPost> cachedData = (List<DiscussPost>) redisTemplate.opsForValue().get(redisKey);
+                        if(cachedData!=null){
+                            logger.debug("load post list from Redis");
+                            return cachedData;
+                        }
                         logger.debug("load post list from DB.");
-                        return discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
+                        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
+                        redisTemplate.opsForValue().set(redisKey, list, expireSeconds2, TimeUnit.SECONDS);
+                        return list;
                     }
                 });
 
         //初始化帖子总数缓存
         postRowsCache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
-                .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
+                .expireAfterWrite(expireSeconds1, TimeUnit.SECONDS)
                 .build(new CacheLoader<Integer, Integer>() {
                     @Override
                     public @Nullable Integer load(@NonNull Integer key) throws Exception {
-
+                        String redisKey = RedisKeyUtil.getHomeNum();
+                        Integer cachedRows = (Integer) redisTemplate.opsForValue().get(RedisKeyUtil.getHomeNum());
+                        if(cachedRows != null){
+                            logger.debug("load post num from Redis");
+                            return cachedRows;
+                        }
 
                         logger.debug("load post list from DB.");
-                        return discussPostMapper.selectDiscussPostRows(key);
+                        Integer num = discussPostMapper.selectDiscussPostRows(key);
+                        redisTemplate.opsForValue().set(redisKey, num, expireSeconds2, TimeUnit.SECONDS);
+                        return num;
                     }
                 });
     }
