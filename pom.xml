@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Community</name>
 	<description>kairo community</description>
-<!--	<packaging>war</packaging>-->
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>11</java.version>
@@ -135,7 +135,7 @@
     </dependencies>
 
 	<build>
-<!--		<finalName>ROOT</finalName>-->
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

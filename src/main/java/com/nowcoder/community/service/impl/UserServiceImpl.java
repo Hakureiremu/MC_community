@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 //import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -71,6 +72,7 @@ public class UserServiceImpl implements UserService, CommunityConstant{
      * @return
      */
     @Override
+    @Transactional
     public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
 
