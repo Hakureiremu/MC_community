@@ -54,6 +54,14 @@ public class DiscussPostController implements CommunityConstant {
             return CommunityUtil.getJSONString(403, "请登录后再发帖！");
         }
 
+        if(title == ""){
+            return CommunityUtil.getJSONString(403, "标题不能为空！");
+        }
+
+        if(content == ""){
+            return CommunityUtil.getJSONString(403, "内容不能为空！");
+        }
+
         DiscussPost post = new DiscussPost();
         post.setTitle(title);
         post.setContent(content);

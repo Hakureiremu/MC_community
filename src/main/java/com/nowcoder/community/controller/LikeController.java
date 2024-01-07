@@ -40,6 +40,11 @@ public class LikeController implements CommunityConstant {
     public String like(int entityType, int entityId, int entityUserId, int postId){
         User user = hostHolder.getUser();
 
+        if(user == null){
+            //未登录则提示无权限
+            return CommunityUtil.getJSONString(403, "请登录后再点赞！");
+        }
+
         //点赞
         likeService.like(user.getId(), entityType, entityId, entityUserId);
         //数量

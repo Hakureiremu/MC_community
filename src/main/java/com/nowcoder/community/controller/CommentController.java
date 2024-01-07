@@ -8,6 +8,7 @@ import com.nowcoder.community.entity.User;
 import com.nowcoder.community.event.EventProducer;
 import com.nowcoder.community.service.CommentService;
 import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
 import com.nowcoder.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,10 @@ public class CommentController implements CommunityConstant {
     private RedisTemplate redisTemplate;
 
     @RequestMapping(path = "/add/{discussPostId}", method = RequestMethod.POST)
-    //要修改成异步方式，不然未登录用户摸一下评论就直接跳error页面
     @ResponseBody
     public String addComment(@PathVariable("discussPostId") int discussPostId, Comment comment){
         User user = hostHolder.getUser();
+
         comment.setUserId(user.getId());
         comment.setStatus(0);
         comment.setCreateTime(new Date());
