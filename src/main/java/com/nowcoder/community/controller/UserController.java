@@ -186,8 +186,7 @@ public class UserController implements CommunityConstant {
     }
 
     @RequestMapping(path = "/posts", method = RequestMethod.GET)
-    public String getUserPosts(Model model, Page page){
-        User user = hostHolder.getUser();
+    public String getUserPosts(Model model, Page page, User user){
         int userId = user.getId();
         if(user == null){
             throw new RuntimeException("该用户不存在！");
@@ -217,8 +216,7 @@ public class UserController implements CommunityConstant {
     }
 
     @RequestMapping(path = "/comments", method = RequestMethod.GET)
-    public String getUserComments(Model model, Page page){
-        User user = hostHolder.getUser();
+    public String getUserComments(Model model, Page page, User user){
         int userId = user.getId();
 
         //分页信息
