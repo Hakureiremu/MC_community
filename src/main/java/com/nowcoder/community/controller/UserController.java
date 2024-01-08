@@ -185,16 +185,13 @@ public class UserController implements CommunityConstant {
         return "/site/profile";
     }
 
-    @RequestMapping(path = "/posts", method = RequestMethod.GET)
-    public String getUserPosts(Model model, Page page, User user){
-        int userId = user.getId();
-        if(user == null){
-            throw new RuntimeException("该用户不存在！");
-        }
+    @RequestMapping(path = "/profile/{userId}/posts", method = RequestMethod.GET)
+    public String getUserPosts(Model model, Page page, @PathVariable("userId") int userId){
+        User user = userService.findUserById(userId);
 
         //分页信息
         page.setLimit(5);
-        page.setPath("/posts");
+        page.setPath("/user/profile/"+userId+"/posts");
         page.setRows(postService.findRows(userId));
 
         List<DiscussPost> list = postService.findDiscussPosts(userId, page.getOffset(), page.getLimit(), 0);
@@ -211,17 +208,18 @@ public class UserController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts", discussPosts);
+        model.addAttribute("user", user);
 
         return "/site/my-post";
     }
 
-    @RequestMapping(path = "/comments", method = RequestMethod.GET)
-    public String getUserComments(Model model, Page page, User user){
-        int userId = user.getId();
+    @RequestMapping(path = "/profile/{userId}/comments", method = RequestMethod.GET)
+    public String getUserComments(Model model, Page page, @PathVariable("userId") int userId){
+        User user = userService.findUserById(userId);
 
         //分页信息
         page.setLimit(5);
-        page.setPath("/comments");
+        page.setPath("/user/profile/"+userId+"/comments");
         page.setRows(postService.findRows(userId));
 
         List<Comment> list = commentService.findCommentByUserId(userId, page.getOffset(), page.getLimit());
@@ -239,6 +237,7 @@ public class UserController implements CommunityConstant {
             }
         }
         model.addAttribute("comments", comments);
+        model.addAttribute("user", user);
         return "/site/my-reply";
     }
 
