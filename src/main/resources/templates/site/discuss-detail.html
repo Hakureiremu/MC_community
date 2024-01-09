@@ -74,7 +74,7 @@
 						<button type="button" class="btn btn-danger btn-sm" id="wonderfulBtn"
 								th:if="${user.id==1}" th:disabled="${post.status == 1}">加精</button>
 						<button type="button" class="btn btn-danger btn-sm" id="deleteBtn"
-								th:if="${loginUser!=null && user.id==loginUser.id}" th:disabled="${post.status == 2}">删除</button>
+								th:if="${loginUser!=null && user.id==loginUser.id || loginUser.id == 11}" th:disabled="${post.status == 2}">删除</button>
 					</div>
 				</h6>
 				<!-- 作者 -->
