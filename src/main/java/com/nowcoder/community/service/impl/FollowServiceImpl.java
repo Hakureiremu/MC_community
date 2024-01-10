@@ -1,5 +1,6 @@
 package com.nowcoder.community.service.impl;
 
+import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.constant.CommunityConstant;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.FollowService;
@@ -24,6 +25,7 @@ public class FollowServiceImpl implements FollowService, CommunityConstant {
     private UserService userService;
 
     //关注
+    @LoginRequired
     @Override
     public void follow(int userId, int entityType, int entityId) {
         redisTemplate.execute(new SessionCallback() {
@@ -43,6 +45,7 @@ public class FollowServiceImpl implements FollowService, CommunityConstant {
     }
 
     //取消关注
+    @LoginRequired
     @Override
     public void unfollow(int userId, int entityType, int entityId) {
         redisTemplate.execute(new SessionCallback() {

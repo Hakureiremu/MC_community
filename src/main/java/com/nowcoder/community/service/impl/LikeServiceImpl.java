@@ -1,5 +1,6 @@
 package com.nowcoder.community.service.impl;
 
+import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class LikeServiceImpl implements LikeService {
     private RedisTemplate redisTemplate;
 
     //点赞和取消点赞
+    @LoginRequired
     @Override
     public void like(int userId, int entityType, int entityId, int entityUserId) {
         redisTemplate.execute(new SessionCallback() {

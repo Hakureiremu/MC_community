@@ -76,27 +76,10 @@ public class UserServiceImpl implements UserService, CommunityConstant{
     public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
 
-//        if(user == null){
-//            throw new IllegalArgumentException("参数不能为空!");
-//        }
-//        if(StringUtils.isBlank(user.getUsername())){
-//            map.put("usernameMsg", "账号不能为空！");
-//            return map;
-//        }
-//        if(StringUtils.isBlank(user.getPassword())){
-//            map.put("passwordMsg", "密码不能为空！");
-//            return map;
-//        }
-
         if(user.getPassword().length() < 8){
             map.put("passwordMsg", "密码不能小于八位！");
             return map;
         }
-
-//        if(StringUtils.isBlank(user.getEmail())){
-//            map.put("emailMsg", "邮箱不能为空！");
-//            return map;
-//        }
 
         //验证账号
         User u = userMapper.selectByName(user.getUsername());

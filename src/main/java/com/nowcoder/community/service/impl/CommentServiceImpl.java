@@ -1,5 +1,6 @@
 package com.nowcoder.community.service.impl;
 
+import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.constant.CommunityConstant;
 import com.nowcoder.community.dao.CommentMapper;
 import com.nowcoder.community.dao.DiscussPostMapper;
@@ -38,6 +39,7 @@ public class CommentServiceImpl implements CommentService, CommunityConstant {
     }
 
     @Override
+    @LoginRequired
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public int addComment(Comment comment) {
         if(comment == null){
