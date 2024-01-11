@@ -80,7 +80,7 @@ public class RedisKeyUtil {
     }
 
     //帖子列表（按热度）
-    public static String getHomeKey(){ return PREFIX_HOME;}
+    public static String getHomeKey(int offset, int limit){ return PREFIX_HOME+SPLIT+offset+SPLIT+limit;}
 
     //帖子数量（按热度）
     public static String getHomeNum(){ return PREFIX_POST_NUM;}

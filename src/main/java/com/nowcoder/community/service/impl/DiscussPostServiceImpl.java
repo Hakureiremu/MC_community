@@ -78,7 +78,8 @@ public class DiscussPostServiceImpl implements DiscussPostService {
                         int offset = Integer.valueOf(params[0]);
                         int limit = Integer.valueOf(params[1]);
 
-                        String redisKey = RedisKeyUtil.getHomeKey();
+                        String redisKey = RedisKeyUtil.getHomeKey(offset, limit);
+
                         //二级缓存
                         List<DiscussPost> cachedData = (List<DiscussPost>) redisTemplate.opsForValue().get(redisKey);
                         if(cachedData!=null){

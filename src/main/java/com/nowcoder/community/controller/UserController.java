@@ -229,9 +229,11 @@ public class UserController implements CommunityConstant {
             for(Comment comment : list){
                 Map<String, Object> map = new HashMap<>();
                 if(comment.getEntityType() == ENTITY_TYPE_POST){
-                    map.put("comment", comment);
                     DiscussPost post = postService.findDiscussPostById(comment.getEntityId());
-                    map.put("post", post);
+                    if(post!=null){
+                        map.put("comment", comment);
+                        map.put("post", post);
+                    }
                 }
                 comments.add(map);
             }
