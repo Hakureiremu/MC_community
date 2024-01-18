@@ -172,8 +172,10 @@ public class DiscussPostController implements CommunityConstant {
     //帖子置顶
     @RequestMapping(path = "/top", method = RequestMethod.POST)
     @ResponseBody
-    public String setTop(int id){
-        discussPostService.updateType(id, 1);
+    public String setTop(int id, int type){
+        discussPostService.updateType(id, type);
+        Map<String, Object> map = new HashMap<>();
+        map.put("Type", type);
 
         //触发发帖事件
         Event event = new Event()
@@ -183,8 +185,11 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityId(id);
 
         eventProducer.fireEvent(event);
+        //计算帖子分数
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey, id);
 
-        return CommunityUtil.getJSONString(0);
+        return CommunityUtil.getJSONString(0, null, map);
     }
 
     //帖子加精

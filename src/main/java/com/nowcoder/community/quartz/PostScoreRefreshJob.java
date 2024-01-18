@@ -1,6 +1,7 @@
 package com.nowcoder.community.quartz;
 
 import com.nowcoder.community.constant.CommunityConstant;
+import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.service.DiscussPostService;
 import com.nowcoder.community.service.ElasticSearchService;
@@ -19,6 +20,8 @@ import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PostScoreRefreshJob implements Job, CommunityConstant {
     private static Logger logger = LoggerFactory.getLogger(PostScoreRefreshJob.class);
@@ -38,6 +41,9 @@ public class PostScoreRefreshJob implements Job, CommunityConstant {
 
     @Autowired
     private DiscussPostService discussPostService;
+
+    @Autowired
+    private DiscussPostMapper discussPostMapper;
 
     @Autowired
     private LikeService likeService;
@@ -86,6 +92,13 @@ public class PostScoreRefreshJob implements Job, CommunityConstant {
 
         //更新帖子分数
         discussPostService.updateScore(postId, score);
+
+        //更新缓存
+        logger.info("更新缓存");
+        List<DiscussPost> hotPosts1 = discussPostMapper.selectDiscussPosts(0, 0, 10, 1);
+        List<DiscussPost> hotPosts2 = discussPostMapper.selectDiscussPosts(0, 10, 10, 1);
+        redisTemplate.opsForValue().set(RedisKeyUtil.getHomeKey(0,10), hotPosts1);
+        redisTemplate.opsForValue().set(RedisKeyUtil.getHomeKey(10,10), hotPosts2);
 
         //同步搜索数据
         post.setScore(score);

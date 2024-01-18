@@ -5,10 +5,11 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Document(indexName = "discusspost", shards = 6, replicas = 3)
-public class DiscussPost {
+public class DiscussPost implements Serializable {
     @Id
     private int id;
 

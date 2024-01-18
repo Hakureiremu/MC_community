@@ -1,5 +1,5 @@
 $(function (){
-    $("#topBtn").click(setTop);
+    // $("#topBtn").click(setTop);
     $("#wonderfulBtn").click(setWonderful);
     $("#deleteBtn").click(setDelete);
 });
@@ -21,20 +21,43 @@ function like(btn, entityType, entityId, entityUserId, postId){
 }
 
 //置顶
-function setTop(){
+// function setTop(){
+//     $.post(
+//         CONTEXT_PATH + "/discuss/top",
+//         {"id":$("#postId").val()},
+//         function (data){
+//             data = $.parseJSON(data);
+//             if(data.code == 0){
+//                 $("#topBtn").attr("disabled", "disabled");
+//             }else{
+//                 alert(data.msg);
+//             }
+//         }
+//     );
+// }
+
+
+function setTop(button, postId, postType) {
+    var newType = postType == 1? 0:1;
+
+    // 发送 AJAX 请求
     $.post(
         CONTEXT_PATH + "/discuss/top",
-        {"id":$("#postId").val()},
-        function (data){
+        {"id": postId, "type": newType},  // 传递帖子ID和当前状态
+        function (data) {
             data = $.parseJSON(data);
-            if(data.code == 0){
-                $("#topBtn").attr("disabled", "disabled");
-            }else{
+            if (data.code == 0) {
+                // 更新按钮文本
+                window.location.reload();
+                // $(button).children("b").text(data.Type == 1? '取消置顶' : "置顶");
+            } else {
                 alert(data.msg);
             }
         }
     );
 }
+
+
 
 //加精
 function setWonderful(){

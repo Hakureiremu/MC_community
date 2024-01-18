@@ -69,8 +69,16 @@
 					<span th:utext="${post.title}">备战春招，面试刷题跟他复习，一个月全搞定！</span>
 					<div class="float-right">
 						<input type="hidden" id="postId" th:value="${post.id}">
+<!--						<button type="button" class="btn btn-danger btn-sm" id="topBtn"-->
+<!--								th:if="${loginUser!=null}" th:disabled="${}">订阅</button>-->
+<!--						<button type="button" class="btn btn-danger btn-sm" id="topBtn"-->
+<!--								th:if="${loginUser!=null && loginUser.id==11}" th:disabled="${post.type == 1}">置顶</button>-->
 						<button type="button" class="btn btn-danger btn-sm" id="topBtn"
-								th:if="${loginUser!=null && loginUser.id==11}" th:disabled="${post.type == 1}">置顶</button>
+								th:if="${loginUser != null && loginUser.id == 11}"
+								th:onclick="|setTop(this, ${post.id}, ${post.type});|">
+							<b th:text="${post.type == 0? '置顶':'取消置顶'}">置顶</b>
+						</button>
+
 						<button type="button" class="btn btn-danger btn-sm" id="wonderfulBtn"
 								th:if="${loginUser!=null && loginUser.id==11}" th:disabled="${post.status == 1}">加精</button>
 						<button type="button" class="btn btn-danger btn-sm" id="deleteBtn"
@@ -124,7 +132,7 @@
 				<!-- 回帖列表 -->
 				<ul class="list-unstyled mt-4">
 					<!-- 第1条回帖 -->
-					<li class="media pb-3 pt-3 mb-3 border-bottom" th:each="cvo:${comments}">
+					<li class="media pb-3 pt-3 mb-3 border-bottom" th:id="@{|reply-${cvo.comment.id}|}" th:each="cvo:${comments}">
 						<a th:href="@{|/user/profile/${cvo.user.id}|}">
 							<img th:src="${cvo.user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="用户头像" >
 						</a>

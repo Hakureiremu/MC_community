@@ -67,6 +67,10 @@ public interface CommunityConstant {
     String TOPIC_DELETE = "delete";
 
     /**
+     * 主题：帖子状态更新
+     */
+
+    /**
      * 系统用户id
      */
     int SYSTEM_USER_ID = 1;

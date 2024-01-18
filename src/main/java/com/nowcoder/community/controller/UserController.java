@@ -37,9 +37,6 @@ public class UserController implements CommunityConstant {
     @Autowired
     private AliOssUtil aliOssUtil;
 
-//    @Value("${community.path.upload}")
-//    private String uploadPath;
-
     @Value("${community.path.domain}")
     private String domain;
 
@@ -114,31 +111,6 @@ public class UserController implements CommunityConstant {
 //        }
         return "redirect:/index";
     }
-
-//    //使用流向浏览器输出二进制文件
-//    //显示头像
-//    @RequestMapping(path = "/header/{fileName}", method = RequestMethod.GET)
-//    public void getHeader(@PathVariable("fileName") String fileName, HttpServletResponse response){
-//        //服务器存放路径
-//        fileName = uploadPath + "/" + fileName;
-//        //获取后缀
-//        String suffix = fileName.substring(fileName.lastIndexOf("."));
-////        System.out.println(suffix);
-//        //响应图片
-//        response.setContentType("image/" + suffix);
-//        try (
-//            ServletOutputStream os = response.getOutputStream();
-//            FileInputStream fis= new FileInputStream(fileName);
-//        ) {
-//            byte[] buffer = new byte[1024];
-//            int b = 0;
-//            while ((b = fis.read(buffer)) != -1) {
-//                os.write(buffer, 0, b);
-//            }
-//        } catch (IOException e) {
-//            logger.error("读取头像失败："+e.getMessage());
-//        }
-//    }
 
     //修改密码
     @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
