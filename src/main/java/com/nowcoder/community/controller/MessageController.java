@@ -2,13 +2,16 @@ package com.nowcoder.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nowcoder.community.constant.CommunityConstant;
+import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.Message;
 import com.nowcoder.community.entity.Page;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.DiscussPostService;
 import com.nowcoder.community.service.MessageService;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailParseException;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,9 @@ import java.util.*;
 public class MessageController implements CommunityConstant {
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private DiscussPostService discussPostService;
 
     @Autowired
     private HostHolder hostHolder;
@@ -233,6 +239,32 @@ public class MessageController implements CommunityConstant {
             int unread = messageService.findUnreadNoticeCount(user.getId(), TOPIC_FOLLOW);
             messageVO.put("unread", unread);
             model.addAttribute("followNotice", messageVO);
+        }
+
+        //查询订阅类通知
+        message = messageService.findLatestNotice(user.getId(), TOPIC_PUBLISH);
+        if(message != null){
+            Map<String, Object> messageVO = new HashMap<>();
+            messageVO.put("message", message);
+            //还原content内容
+            String content = HtmlUtils.htmlUnescape(message.getContent());
+            Map<String, Object> data = JSONObject.parseObject(content, HashMap.class);
+
+            //查最新通知
+            messageVO.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVO.put("entityType", data.get("entityType"));
+            messageVO.put("entityId", data.get("entityId"));
+//            DiscussPost post = discussPostService.findDiscussPostById((Integer) data.get("entityId"));
+//            messageVO.put("title", post.getTitle());
+
+            //查通知数量
+            int count = messageService.findNoticeCount(user.getId(), TOPIC_PUBLISH);
+            messageVO.put("count", count);
+
+            //通知未读数量
+            int unread = messageService.findUnreadNoticeCount(user.getId(), TOPIC_PUBLISH);
+            messageVO.put("unread", unread);
+            model.addAttribute("publishNotice", messageVO);
         }
 
         //未读消息总数量

@@ -15,6 +15,7 @@ public class RedisKeyUtil {
     private static final String PREFIX_POST = "post";
     private static final String PREFIX_HOME = "home";
     private static final String PREFIX_POST_NUM = "homeNum";
+    private static final String PREFIX_FOLLOW_UPDATES = "updates";
 
     //某个实体的赞
     //like:entity:entityType:entityId -> set(userId)
@@ -38,6 +39,12 @@ public class RedisKeyUtil {
     public static String getFollowerKey(int entityType, int entityId){
         return PREFIX_FOLLOWER + SPLIT + entityType + SPLIT + entityId;
     }
+
+    //用户的收件箱
+    public static String getFollowUpdatesKey(int userId){
+        return PREFIX_FOLLOW_UPDATES + SPLIT + userId;
+    }
+
 
     //登录验证码
     public static String getKaptchaKey(String owner){

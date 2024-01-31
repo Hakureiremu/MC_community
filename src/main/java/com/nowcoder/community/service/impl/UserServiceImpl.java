@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService, CommunityConstant{
         return map;
     }
 
+    @Transactional
     public int activation(int userId, String code){
         User user = userMapper.selectById(userId);
         if(user.getStatus()==1){
@@ -195,6 +196,7 @@ public class UserServiceImpl implements UserService, CommunityConstant{
         return rows;
     }
 
+    @Transactional
     public Map<String, Object> updatePassword(User user, String originalPassword, String newPassword, String confirmPassword){
         Map<String, Object> map = new HashMap<>();
 

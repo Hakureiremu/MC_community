@@ -43,7 +43,6 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 //    //缓存数据的数量
 //    @Value("${caffeine.posts.max-size}")
 //    private int maxSize;
-//
     //缓存过期时间
     @Value("${caffeine.posts.expire-seconds}")
     private int expireSeconds1;
